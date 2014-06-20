@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# This script is mean to provide a painless way of updating any distribution that uses apt, yum, pacman, and emerge with little input from the user. The advantage provided is that you can push the same command to multiple systems to begin the update process, or just remember one command to update them all!
-#
-# If you would like additonal information, please consult the man pages for your package manager and it's associated manual pages.
-#
-# Note: This script is currently not posix compliant, and may not run on all types of systems
-
-
 
 ### Specifying conditions
 
@@ -23,24 +16,28 @@ function sudo_check {
 
 # Check current package manager
 function pkg_check {
-  co
+  if command -v apt-get; then
+    value=1
+    echo "Package apt is installed."
+  else
+    value=0
+    echo "Package apt is not installed."
+  fi
 }
 
 
+### Update Procedures
 
-### 
-
-## Archlinux-based (using pacman)
+## Pacman | Yaourt
 # Run using sudo
-function arch_sudo {
+function pac_sudo {
   sudo pacman -Syu
 }
 
 # Run as root/admin
-function arch_su {
+function pac_su {
   pacman -Syu
 }
-
 
 
 ## APT
@@ -52,6 +49,7 @@ function apt_sudo {
   sudo apt-get autoremove
   sudo apt-get clean
 }
+
 # Run as root/admin
 function apt_su {
   apt-get update
@@ -61,25 +59,38 @@ function apt_su {
   apt-get clean
 }
 
-## YUM
-# Run using sudo
-#function yum_sudo {
-#  
-#}
-# Run as root/admin
-#function yum_su {
-#  
-#}
 
-# Run for current system
-#function operate {
-#  if sudo_check=1 ;
-#    then
-#      
-#  elif
-#    echo "Sudo not found, requesting login via su"
-#fi
-#}
+## YUM
+
+# Run using sudo
+function yum_sudo {
+  sudo yum update
+  sudo yum clean all
+}
+
+# Run as root/admin
+function yum_su {
+  yum update
+  yum clean all
+}
+
+
+## Emerge
+
+
+
+### Operation
+
+# Run based on var's
+function qkpg {
+  if sudo_check=1 ;
+    then
+      
+  elif
+    
+fi
+}
+
 
 
 ### Excecution order
